@@ -13,15 +13,12 @@ const Tile = createVisualComponent({
   propTypes: {
     shoppingListItem: PropTypes.shape({
       name: PropTypes.string.isRequired,
-      text: PropTypes.string,
+      amount: PropTypes.int,
       imageUrl: PropTypes.string,
-      uuIdentityName: PropTypes.string.isRequired,
-      sys: PropTypes.shape({
-        cts: PropTypes.string,
-      }),
-    }).isRequired,
+      bought: PropTypes.boolean
+    }).isRequired/*,
     onUpdate: PropTypes.func,
-    onDelete: PropTypes.func,
+    onDelete: PropTypes.func,*/
   },
   //@@viewOff:propTypes
 
@@ -53,26 +50,21 @@ const Tile = createVisualComponent({
         </Text>
         <div>
           <Text category="interface" segment="content" type="medium" colorScheme="building">
-            {props.shoppingListItem.text}
+            {props.shoppingListItem.amount}
           </Text>
         </div>
         <div>
           <img src={props.shoppingListItem.imageUrl} />
         </div>
-        <Line significance="subdued" />
         <div>
           <Text category="interface" segment="content" type="medium" significance="subdued" colorScheme="building">
-            {props.shoppingListItem.uuIdentityName}
-          </Text>
-        </div>
-        <div>
-          <Text category="interface" segment="content" type="medium" significance="subdued" colorScheme="building">
-            <DateTime value={props.shoppingListItem.sys.cts} />
+            {"Has it been bought? : "+ props.shoppingListItem.bought}
           </Text>
         </div>
         <Box significance="distinct">
+          <Button icon="mdi-check" significance="subdued" tooltip="Add" text="Add members" />
           <Button icon="mdi-pencil" onClick={handleUpdate} significance="subdued" tooltip="Update" />
-          <Button icon="mdi-delete" onClick={handleDelete} significance="subdued" tooltip="Delete" />
+          <Button icon="mdi-delete" onClick={handleDelete} significance="subdued" tooltip="Delete" />        
         </Box>
       </Box>
     );
