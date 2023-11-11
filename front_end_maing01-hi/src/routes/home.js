@@ -3,6 +3,7 @@ import { Utils, createVisualComponent, useSession, Lsi } from "uu5g05";
 import Uu5Elements from "uu5g05-elements";
 import Plus4U5Elements from "uu_plus4u5g02-elements";
 import { withRoute } from "uu_plus4u5g02-app";
+import Tile from "../bricks/joke/tile"
 
 import Config from "./config/config.js";
 import WelcomeRow from "../bricks/welcome-row.js";
@@ -52,38 +53,40 @@ let Home = createVisualComponent({
     return (
       <div {...attrs}>
         <RouteBar />
-        <WelcomeRow left={<Plus4U5Elements.PersonPhoto size="xl" borderRadius="none" />}>
+        <WelcomeRow left>
           <Uu5Elements.Text category="story" segment="heading" type="h2">
-            <Lsi import={importLsi} path={["Home", "welcome"]} />
-          </Uu5Elements.Text>
-          {identity && (
-            <Uu5Elements.Text category="story" segment="heading" type="h2">
-              {identity.name}
-            </Uu5Elements.Text>
-          )}
-        </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-human-greeting" className={Css.icon()} />}>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "intro"]} />
+            <Lsi import={importLsi} path={["RecipeTest", "name"]} />
           </Uu5Elements.Text>
         </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-monitor" className={Css.icon()} />}>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "clientSide"]} />
-          </Uu5Elements.Text>
-        </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-server" className={Css.icon()} />}>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "serverSide"]} />
-          </Uu5Elements.Text>
-        </WelcomeRow>
+        <Tile
+          shoppingListItem={{
+            name: "Bunny ate the wedding ring!",
+            text: "Why did the bunny eat the wedding ring? Because he heard it was 18 carrots!",
+            uuIdentityName: "John Smith",
+            sys: { cts: "2022-03-17T09:48:38.990Z" },
+          }}
+          //onDelete={handleDelete}
+          //onUpdate={handleUpdate}
+          style={{ width: 640, margin: "24px auto" }}
+        />
+        <Tile
+          shoppingListItem={{
+            name: "F5",
+            text: "I love the F5 key. It´s just so refreshing.",
+            uuIdentityName: "Harry Potter",
+            sys: { cts: "2022-02-14T10:48:38.990Z" },
+          }}
+          //onDelete={handleDelete}
+          //onUpdate={handleUpdate}
+          style={{ width: 640, margin: "24px auto" }}
+        />
       </div>
     );
     //@@viewOff:render
   },
 });
 
-Home = withRoute(Home, { authenticated: true });
+//Home = withRoute(Home, { authenticated: true });
 
 //@@viewOn:exports
 export { Home };
