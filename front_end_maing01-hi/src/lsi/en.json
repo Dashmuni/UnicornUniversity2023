@@ -7,7 +7,7 @@
   },
   "RecipeTest":
   {
-    "name":"Testing Recipe Number 42",
+    "name":"Welcome to Shopping List App!",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tincidunt porttitor justo, id facilisis risus rutrum non. Duis porttitor vulputate magna convallis imperdiet. Quisque laoreet velit in mauris rutrum, vitae ornare mi euismod. Phasellus molestie hendrerit sagittis. Curabitur sit amet sem bibendum, maximus diam eget, laoreet massa. Duis placerat magna.",
     "testItem1": "",
     "testItem2": ""

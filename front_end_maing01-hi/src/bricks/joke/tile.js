@@ -4,6 +4,13 @@ import { Box, Text, Line, Button, DateTime } from "uu5g05-elements";
 import Config from "./config/config.js";
 //@@viewOff:imports
 
+//@@viewOn:css
+const Css = {
+  main: () => Config.Css.css({}),
+};
+//@@viewOff:css
+
+
 const Tile = createVisualComponent({
   //@@viewOn:statics
   uu5Tag: Config.TAG + "Tile",
@@ -11,14 +18,18 @@ const Tile = createVisualComponent({
 
   //@@viewOn:propTypes
   propTypes: {
-    shoppingListItem: PropTypes.shape({
+    shoppingList: PropTypes.shape({
       name: PropTypes.string.isRequired,
-      amount: PropTypes.int,
+      text: PropTypes.string,
       imageUrl: PropTypes.string,
-      bought: PropTypes.boolean
-    }).isRequired/*,
+      averageRating: PropTypes.number.isRequired,
+      uuIdentityName: PropTypes.string.isRequired,
+      sys: PropTypes.shape({
+        cts: PropTypes.string,
+      }),
+    }).isRequired,
     onUpdate: PropTypes.func,
-    onDelete: PropTypes.func,*/
+    onDelete: PropTypes.func,
   },
   //@@viewOff:propTypes
 
@@ -32,43 +43,56 @@ const Tile = createVisualComponent({
   render(props) {
     //@@viewOn:private
     function handleDelete(event) {
-      props.onDelete(new Utils.Event(props.shoppingListItem, event));
+      props.onDelete(new Utils.Event(props.shoppingList, event));
     }
 
     function handleUpdate(event) {
-      props.onUpdate(new Utils.Event(props.shoppingListItem, event));
+      props.onUpdate(new Utils.Event(props.shoppingList, event));
     }
     //@@viewOff:private
-
-    //@@viewOn:render
     const { elementProps } = Utils.VisualComponent.splitProps(props);
-
+    let buttons;
+    if (props.shoppingList.uuIdentityName === "Test01"){
+      buttons =           
+      <Box significance="distinct">
+        {`Average rating: ${props.shoppingList.averageRating.toFixed(props.shoppingList.averageRating % 1 ? 1 : 0)} / 5`}
+        <Button icon="mdi-pencil" onClick={handleUpdate} significance="subdued" tooltip="Update" />
+        <Button icon="mdi-delete" onClick={handleDelete} significance="subdued" tooltip="Delete" />
+      </Box>
+    } else {
+      buttons = 
+      <Box significance="distinct">
+        {`Average rating: ${props.shoppingList.averageRating.toFixed(props.shoppingList.averageRating % 1 ? 1 : 0)} / 5`}
+        <Button icon="mdi-pencil" onClick={handleUpdate} significance="subdued" tooltip="Update" />
+      </Box>
+    }
     return (
       <Box {...elementProps}>
         <Text category="interface" segment="title" type="minor" colorScheme="building">
-          {props.shoppingListItem.name}
+          {props.shoppingList.name}
         </Text>
         <div>
           <Text category="interface" segment="content" type="medium" colorScheme="building">
-            {props.shoppingListItem.amount}
+            {props.shoppingList.description}
           </Text>
         </div>
         <div>
-          <img src={props.shoppingListItem.imageUrl} />
+          <img src={props.shoppingList.imageUrl} />
+        </div>
+        <Line significance="subdued" />
+        <div>
+          <Text category="interface" segment="content" type="medium" significance="subdued" colorScheme="building">
+            {props.shoppingList.uuIdentityName}
+          </Text>
         </div>
         <div>
           <Text category="interface" segment="content" type="medium" significance="subdued" colorScheme="building">
-            {"Has it been bought? : "+ props.shoppingListItem.bought}
+            <DateTime value={props.shoppingList.sys.cts} />
           </Text>
         </div>
-        <Box significance="distinct">
-          <Button icon="mdi-check" significance="subdued" tooltip="Add" text="Add members" />
-          <Button icon="mdi-pencil" onClick={handleUpdate} significance="subdued" tooltip="Update" />
-          <Button icon="mdi-delete" onClick={handleDelete} significance="subdued" tooltip="Delete" />        
-        </Box>
+        {buttons}
       </Box>
     );
-    //@@viewOff:render
   },
 });
 
