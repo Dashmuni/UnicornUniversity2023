@@ -65,6 +65,12 @@ const ListView = createVisualComponent({
         ListView.logger.error("Error deleting shoppingList", error);
         showError(error, "shoppingList delete failed!");
       }
+      
+      addAlert({
+        message: Utils.String.format(lsi.deleteDone, shoppingListDataObject.data.name),
+        priority: "success",
+        durationMs: 2000,
+      });
     }
 
     function handleUpdate(event) {
