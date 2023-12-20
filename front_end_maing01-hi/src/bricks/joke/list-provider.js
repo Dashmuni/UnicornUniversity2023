@@ -1,6 +1,7 @@
 //@@viewOn:imports
-import { createComponent, Utils, useState } from "uu5g05";
+import { createComponent, Utils, useState, useDataList, useEffect, useRef } from "uu5g05";
 import Config from "./config/config.js";
+import Calls from "calls";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -8,28 +9,6 @@ import Config from "./config/config.js";
 
 //@@viewOn:helpers
 //@@viewOff:helpers
-
-// --- Test 3 section 5_1-Properties ---
-const initialShoppingLists = [
-  {
-    id: Utils.String.generateId(),
-    name: "Cake",
-    description: "No cake",
-    imageUrl: "",
-    averageRating: 1,
-    uuIdentityName: "Homeless",
-    sys: { cts: "2022-03-17T18:56:38.990Z" },
-  },
-  {
-    id: Utils.String.generateId(),
-    name: "Nope",
-    description: "Nopity",
-    imageUrl: "",
-    averageRating: 5,
-    uuIdentityName: "123456",
-    sys: { cts: "2023-04-13T03:45:36.990Z" },
-  },
-];
 
 
 const ListProvider = createComponent({
@@ -47,37 +26,69 @@ const ListProvider = createComponent({
 
   render(props) {
     //@@viewOn:private
-    const [shoppingLists, setshoppingLists] = useState(initialShoppingLists
-    );
+    const shoppingListDataList = useDataList({
+      handlerMap: {
+        load: handleLoad,
+        loadNext: handleLoadNext,
+        create: handleCreate,
+      },
+      itemHandlerMap: {
+        update: handleUpdate,
+        delete: handleDelete,
+        getImage: handleGetImage,
+      },
+      pageSize: 3,
+    });
 
+    const imageUrlListRef = useRef([]);
 
-    function remove(shoppingList) {
-      setshoppingLists((prevshoppingLists) => prevshoppingLists.filter((item) => item.id !== shoppingList.id));
+    function handleLoad(dtoIn) {
+      return Calls.ShoppingList.list(dtoIn);
     }
 
-    function create(values) {
-      const shoppingList = {
-        ...values,
-        id: Utils.String.generateId(),
-        averageRating: Math.round(Math.random() * 5), // <0, 5>
-        uuIdentityName: "Test01",
-        sys: {
-          cts: new Date().toISOString(),
-        },
-      };
-
-      setshoppingLists((prevshoppingLists) => [...prevshoppingLists, shoppingList]);
-      return shoppingList;
+    function handleLoadNext(pageInfo) {
+      const dtoIn = { pageInfo };
+      return Calls.ShoppingList.list(dtoIn);
     }
 
-    function update() {
-      throw new Error("shoppingList update is not implemented yet.");
+    function handleCreate(values) {
+      return Calls.ShoppingList.create(values);
     }
+
+    async function handleUpdate(values) {
+      return Calls.Joke.update(values);
+    }
+
+    function handleDelete(shoppingList) {
+      const dtoIn = { id: shoppingList.id };
+      return Calls.ShoppingList.delete(dtoIn, props.baseUri);
+    }
+
+    async function handleGetImage(shoppingList) {
+      const dtoIn = { code: shoppingList.image };
+      const imageFile = await Calls.ShoppingList.getImage(dtoIn);
+      const imageUrl = generateAndRegisterImageUrl(imageFile);
+      return { ...shoppingList, imageFile, imageUrl };
+    }
+
+    function generateAndRegisterImageUrl(imageFile) {
+      const imageUrl = URL.createObjectURL(imageFile);
+      imageUrlListRef.current.push(imageUrl);
+      return imageUrl;
+    }
+
+    useEffect(() => {
+      // We don't use it to store reference on another React component
+      // eslint-disable-next-line uu5/hooks-exhaustive-deps
+      return () => imageUrlListRef.current.forEach((url) => URL.revokeObjectURL(url));
+      // We want to trigger this effect only once.
+      // eslint-disable-next-line uu5/hooks-exhaustive-deps
+    }, []);
     //@@viewOff:private
+    
 
     //@@viewOn:render
-    const value = { shoppingLists, remove, update, create };
-    return typeof props.children === "function" ? props.children(value) : props.children;
+    return typeof props.children === "function" ? props.children(shoppingListDataList) : props.children;
     //@@viewOff:render
   },
 });

@@ -1,0 +1,29 @@
+[
+    {
+      "id": "Utils.String.generateId()",
+      "name": "Nope, noppity",
+      "description": "Nothing here",
+      "imageUrl": "",
+      "averageRating": 4,
+      "uuIdentityName": "Test01",
+      "sys": { "cts": "2023-06-15T29:48:38.990Z" }
+    },
+    {
+      "id":" Utils.String.generateId()",
+      "name": "Bunny buns",
+      "description": "Smol bun",
+      "imageUrl": "",
+      "averageRating": 5,
+      "uuIdentityName": "Homeless",
+      "sys": { "cts": "2023-03-13T15:48:38.990Z" }
+    },
+    {
+      "id":" Utils.String.generateId()",
+      "name": "Out of ideas",
+      "description": "Told you^",
+      "imageUrl": "",
+      "averageRating": 1,
+      "uuIdentityName": "Homeless",
+      "sys": { "cts": "2023-07-10T11:48:38.990Z" }
+    }
+  ]
